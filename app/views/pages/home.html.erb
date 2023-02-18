@@ -1,1 +1,8 @@
 <h1>Home</h1>
+
+<% if signed_in? %>
+  You are signed in!
+  <%= button_to 'Sign out', session_path, method: :delete %>
+<% else %>
+  <%= button_to 'Sign in', '/auth/pliro', data: { turbo: false } %>
+<% end %>
