@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
   root 'pages#home'
 
-  post 'auth/:provider/callback', to: 'sessions#create'
-
-  resource :session, only: :destroy
+  post 'sign_in' => 'sessions#init'
+  get 'callback' => 'sessions#create'
+  post 'sign_out' => 'sessions#destroy'
 end
