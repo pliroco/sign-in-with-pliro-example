@@ -1,8 +1,9 @@
 class SessionsController < ApplicationController
+  skip_before_action :verify_authenticity_token, only: :create
+
   def create
-    user_info = request.env['omniauth.auth']
     reset_session
-    session[:id_token] = user_info.credentials.id_token
+    session[:id_token] = params[:id_token]
     redirect_to root_path
   end
 

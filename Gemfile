@@ -74,6 +74,9 @@ group :development do
 
   # Speed up commands on slow machines / big apps [https://github.com/rails/spring]
   # gem "spring"
+
+  # Allow serving the app over HTTPS in development
+  gem 'localhost'
 end
 
 group :test do
