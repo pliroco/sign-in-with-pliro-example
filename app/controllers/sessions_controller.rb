@@ -8,6 +8,6 @@ class SessionsController < ApplicationController
 
   def destroy
     reset_session
-    redirect_to root_path
+    redirect_to '/auth/pliro/logout'
   end
 end

@@ -4,6 +4,7 @@ Rails.application.config.middleware.use OmniAuth::Builder do
     name: :pliro,
     issuer: 'http://localhost:3000',
     # discovery: true,
+    post_logout_redirect_uri: 'http://localhost:4000',
     client_options: {
       identifier: ENV['PLIRO_CLIENT_ID'],
       secret: ENV['PLIRO_CLIENT_SECRET'],
@@ -15,6 +16,7 @@ Rails.application.config.middleware.use OmniAuth::Builder do
       token_endpoint: '/oauth/token',
       jwks_uri: 'http://example-account1.page.localhost:3000/oauth/discovery/keys',
       userinfo_endpoint: '/oauth/userinfo',
+      end_session_endpoint: 'http://example-account1.page.localhost:3000/oauth/end_session',
     },
   )
 end
