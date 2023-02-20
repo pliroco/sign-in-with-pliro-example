@@ -4,6 +4,7 @@ Rails.application.config.middleware.use OmniAuth::Builder do
     name: :pliro,
     issuer: 'http://localhost:3000',
     # discovery: true,
+    scope: [:openid, :profile],
     response_type: 'id_token',
     response_mode: :form_post,
     post_logout_redirect_uri: 'https://localhost:4000',
