@@ -14,8 +14,13 @@ class SessionsController < ApplicationController
   end
 
   def create
-    # TODO: Handle OAuth errors
-    raise 'CSRF error' if params[:state] != session[:state] # TODO: Improve CSRF error handling
+    if params[:error].present?
+      raise "OIDC error: error=#{params[:error].inspect} description=#{params[:error_description].inspect}"
+    end
+
+    if params[:state] != session[:state]
+      raise "CSRF error: state=#{params[:state].inspect} stored_state=#{session[:state].inspect}"
+    end
 
     oidc_client.authorization_code = params[:code]
     access_token_response = oidc_client.access_token!
