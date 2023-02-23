@@ -36,11 +36,16 @@ class SessionsController < ApplicationController
   end
 
   def destroy
+    end_session_uri = URI('http://example-account1.page.localhost:3000/oauth/end_session')
+    end_session_uri.query = {
+      client_id: ENV['PLIRO_CLIENT_ID'],
+      id_token_hint: session[:id_token],
+      post_logout_redirect_uri: 'http://localhost:4000',
+    }.to_query
+
     reset_session
 
-    end_session_endpoint = "http://example-account1.page.localhost:3000/oauth/end_session?post_logout_redirect_uri=#{ERB::Util.url_encode('http://localhost:4000')}"
-
-    redirect_to end_session_endpoint, allow_other_host: true
+    redirect_to end_session_uri.to_s, allow_other_host: true
   end
 
   private
