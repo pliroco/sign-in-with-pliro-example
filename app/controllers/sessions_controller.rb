@@ -35,6 +35,7 @@ class SessionsController < ApplicationController
     reset_session
     session[:customer_id] = decoded_id_token['sub']
     session[:customer_name] = decoded_id_token['name']
+    session[:premium] = decoded_id_token['products'].include?('premium')
     session[:pliro_session_id] = decoded_id_token['sid']
     session[:id_token] = access_token_response.id_token
     session[:access_token] = access_token_response.access_token

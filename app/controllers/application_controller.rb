@@ -1,5 +1,5 @@
 class ApplicationController < ActionController::Base
-  helper_method :signed_in?, :customer_name
+  helper_method :signed_in?, :customer_name, :premium?
 
   private
 
@@ -9,5 +9,9 @@ class ApplicationController < ActionController::Base
 
   def customer_name
     session[:customer_name]
+  end
+
+  def premium?
+    !!session[:premium]
   end
 end
