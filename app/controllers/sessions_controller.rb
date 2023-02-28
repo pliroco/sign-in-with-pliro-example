@@ -65,6 +65,7 @@ class SessionsController < ApplicationController
     if decoded_logout_token[:iss] == 'http://example-account1.page.localhost' &&
         decoded_logout_token[:aud] == ENV['PLIRO_CLIENT_ID'] &&
         decoded_logout_token[:iat] <= Time.current.utc.to_i &&
+        decoded_logout_token[:iat] >= 5.minutes.ago.utc.to_i &&
         decoded_logout_token[:sub].present? &&
         decoded_logout_token[:sid].present? &&
         decoded_logout_token[:events]&.key?('http://schemas.openid.net/event/backchannel-logout') &&
