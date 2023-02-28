@@ -3,11 +3,13 @@ class SessionsController < ApplicationController
 
   def init
     session[:state] = SecureRandom.base58(16)
+    session[:nonce] = SecureRandom.base58(16)
 
     authorization_uri = oidc_client.authorization_uri(
       response_type: 'code',
       scope: ['openid', 'profile'],
       state: session[:state],
+      nonce: session[:nonce],
     )
 
     redirect_to authorization_uri, allow_other_host: true
@@ -25,6 +27,10 @@ class SessionsController < ApplicationController
     oidc_client.authorization_code = params[:code]
     access_token_response = oidc_client.access_token!
     decoded_id_token = JSON::JWT.decode(access_token_response.id_token, :skip_verification)
+
+    if decoded_id_token[:nonce] != session[:nonce]
+      raise "Potential replay attack: nonce=#{decoded_id_token[:nonce].inspect} stored_nonce=#{session[:nonce].inspect}"
+    end
 
     reset_session
     session[:customer_id] = decoded_id_token['sub']
