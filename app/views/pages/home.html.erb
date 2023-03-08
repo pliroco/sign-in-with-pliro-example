@@ -1,8 +1,0 @@
-<h1>Home</h1>
-
-<% if signed_in? %>
-  You are signed in as <%= customer_name %> <%= '(Premium)' if premium? %>
-  <%= button_to 'Sign out', sign_out_path, data: { turbo: false } %>
-<% else %>
-  <%= button_to 'Sign in', sign_in_path, data: { turbo: false } %>
-<% end %>
