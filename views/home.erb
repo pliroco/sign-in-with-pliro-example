@@ -1,0 +1,16 @@
+<% @articles.each do |article| %>
+  <div class="teaser">
+    <a href="/articles/<%= article.slug %>" class="teaser-link"></a>
+
+    <div class="teaser-content">
+      <figure>
+        <img src="/<%= article.image %>">
+        <figcaption><%= article.image_credit %></figcaption>
+      </figure>
+
+      <h2><%= article.headline %></h2>
+
+      <p><%= article.teaser %></p>
+    </div>
+  </div>
+<% end %>
