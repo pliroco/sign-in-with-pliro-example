@@ -7,6 +7,8 @@ GEM
     puma (6.1.1)
       nio4r (~> 2.0)
     rack (2.2.6.3)
+    rack-contrib (2.3.0)
+      rack (~> 2.0)
     rack-protection (3.0.5)
       rack
     ruby2_keywords (0.0.5)
@@ -22,6 +24,7 @@ PLATFORMS
 
 DEPENDENCIES
   puma
+  rack-contrib
   sinatra
 
 RUBY VERSION

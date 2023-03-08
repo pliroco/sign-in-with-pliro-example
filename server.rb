@@ -1,8 +1,14 @@
 require 'bundler/setup'
 require 'json'
 require 'sinatra'
+require 'rack/contrib'
 
 ARTICLES = JSON.parse(File.read(File.join(__dir__, 'articles.json')), object_class: OpenStruct)
+
+# Block search indexing
+use Rack::ResponseHeaders do |headers|
+  headers['X-Robots-Tag'] = 'none'
+end
 
 get '/' do
   @articles = ARTICLES

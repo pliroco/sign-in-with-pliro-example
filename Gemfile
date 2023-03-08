@@ -7,3 +7,6 @@ gem 'sinatra'
 
 # Web server
 gem 'puma'
+
+# Rack middleware and utilities
+gem 'rack-contrib'
