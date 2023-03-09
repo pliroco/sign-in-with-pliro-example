@@ -8,6 +8,16 @@
   <body>
     <header>
       <a href="/">The Greenfield Times</a>
+
+      <% if signed_in? %>
+        Signed in as <%= customer_name %>
+
+        <form action="/sign_out" method="post" style="display: inline">
+          <input type="submit" value="Sign out">
+        </form>
+      <% else %>
+        <a href="/sign_in">Sign in</a>
+      <% end %>
     </header>
 
     <%= yield %>

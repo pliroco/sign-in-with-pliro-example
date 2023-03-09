@@ -10,3 +10,12 @@ gem 'puma'
 
 # Rack middleware and utilities
 gem 'rack-contrib'
+
+# Decode JSON Web Tokens (RFC 7519)
+gem 'jwt'
+
+# Redis client
+gem 'redis'
+
+# Load environment variables from .env and .env.local
+gem 'dotenv', group: :development

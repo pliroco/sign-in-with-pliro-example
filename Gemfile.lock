@@ -1,6 +1,9 @@
 GEM
   remote: https://rubygems.org/
   specs:
+    connection_pool (2.3.0)
+    dotenv (2.8.1)
+    jwt (2.7.0)
     mustermann (3.0.0)
       ruby2_keywords (~> 0.0.1)
     nio4r (2.5.8)
@@ -11,6 +14,10 @@ GEM
       rack (~> 2.0)
     rack-protection (3.0.5)
       rack
+    redis (5.0.6)
+      redis-client (>= 0.9.0)
+    redis-client (0.12.2)
+      connection_pool
     ruby2_keywords (0.0.5)
     sinatra (3.0.5)
       mustermann (~> 3.0)
@@ -23,8 +30,11 @@ PLATFORMS
   arm64-darwin-21
 
 DEPENDENCIES
+  dotenv
+  jwt
   puma
   rack-contrib
+  redis
   sinatra
 
 RUBY VERSION
