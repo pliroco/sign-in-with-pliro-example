@@ -16,7 +16,10 @@ end
 PLIRO_PAGE_URL = URI(ENV.fetch('PLIRO_PAGE_URL'))
 PLIRO_CLIENT_ID = ENV.fetch('PLIRO_CLIENT_ID')
 PLIRO_CLIENT_SECRET = ENV.fetch('PLIRO_CLIENT_SECRET')
-PLIRO_OPENID_CONFIG = JSON.parse(Net::HTTP.get(PLIRO_PAGE_URL + '/.well-known/openid-configuration'), object_class: OpenStruct)
+PLIRO_OPENID_CONFIG = JSON.parse(
+  Net::HTTP.get(PLIRO_PAGE_URL + '/.well-known/openid-configuration'),
+  object_class: OpenStruct,
+)
 PLIRO_JWKS = JWT::JWK::Set.new(JSON.parse(Net::HTTP.get(URI(OPENID_CONFIG.jwks_uri))))
 
 $redis = Redis.new(url: ENV['REDIS_TLS_URL'], ssl_params: { verify_mode: OpenSSL::SSL::VERIFY_NONE })
