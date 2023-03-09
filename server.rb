@@ -20,7 +20,7 @@ PLIRO_OPENID_CONFIG = JSON.parse(
   Net::HTTP.get(PLIRO_PAGE_URL + '/.well-known/openid-configuration'),
   object_class: OpenStruct,
 )
-PLIRO_JWKS = JWT::JWK::Set.new(JSON.parse(Net::HTTP.get(URI(OPENID_CONFIG.jwks_uri))))
+PLIRO_JWKS = JWT::JWK::Set.new(JSON.parse(Net::HTTP.get(URI(PLIRO_OPENID_CONFIG.jwks_uri))))
 
 $redis = Redis.new(url: ENV['REDIS_TLS_URL'], ssl_params: { verify_mode: OpenSSL::SSL::VERIFY_NONE })
 
