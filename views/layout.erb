@@ -12,6 +12,8 @@
       <% if signed_in? %>
         Signed in as <%= customer_name %>
 
+        <a href="<%= PLIRO_PAGE_URL + '/customer' %>">My account</a>
+
         <form action="/sign_out" method="post" style="display: inline">
           <input type="submit" value="Sign out">
         </form>
