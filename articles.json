@@ -1,6 +1,7 @@
 [
   {
     "slug": "community-comes-together-to-clean-up-local-beach",
+    "premium": false,
     "image": "beach.jpg",
     "image_credit": "Photo by <a href=\"https://unsplash.com/es/@aleksandraboguslawska?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText\">Aleksandra Boguslawska</a> on <a href=\"https://unsplash.com/images/nature/beach?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText\">Unsplash</a>",
     "headline": "Community comes together to clean up local beach",
@@ -9,6 +10,7 @@
   },
   {
     "slug": "local-hospital-implements-new-technology-to-improve-patient-care",
+    "premium": true,
     "image": "hospital.jpg",
     "image_credit": "Photo by <a href=\"https://unsplash.com/pt-br/@mdominguezfoto?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText\">Martha Dominguez de Gouveia</a> on <a href=\"https://unsplash.com/photos/nMyM7fxpokE?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText\">Unsplash</a>",
     "headline": "Local hospital implements new technology to improve patient care",
@@ -17,6 +19,7 @@
   },
   {
     "slug": "local-high-school-students-win-national-science-competition",
+    "premium": false,
     "image": "water.jpg",
     "image_credit": "Photo by <a href=\"https://unsplash.com/@enginakyurt?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText\">engin akyurt</a> on <a href=\"https://unsplash.com/s/photos/drinking-water?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText\">Unsplash</a>",
     "headline": "Local high school students win national science competition",
@@ -25,6 +28,7 @@
   },
   {
     "slug": "new-technology-breakthrough-could-revolutionize-renewable-energy-production",
+    "premium": true,
     "image": "solar.jpg",
     "image_credit": "Photo by <a href=\"https://unsplash.com/@wmmead?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText\">Bill Mead</a> on <a href=\"https://unsplash.com/s/photos/solar-panel?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText\">Unsplash</a>",
     "headline": "New technology breakthrough could revolutionize renewable energy production",
@@ -33,6 +37,7 @@
   },
   {
     "slug": "local-charity-organization-exceeds-fundraising-goal-for-community-projects",
+    "premium": false,
     "image": "garden.jpg",
     "image_credit": "Photo by <a href=\"https://unsplash.com/@davidclode?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText\">David Clode</a> on <a href=\"https://unsplash.com/photos/eL4ADAsiOR8?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText\">Unsplash</a>",
     "headline": "Local charity organization exceeds fundraising goal for community projects",

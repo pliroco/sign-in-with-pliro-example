@@ -5,4 +5,16 @@
 
 <h1><%= @article.headline %></h1>
 
-<%= simple_format @article.body %>
+<% if @article.premium && !premium_access? %>
+  <div class="paywall">
+    <p>Subscribe to unlock this article</p>
+
+    <a href="<%= PLIRO_PAGE_URL + '/subscriptions/new?price_id=1' %>">Continue reading for 99 kr</a>
+
+    <% unless signed_in? %>
+      <p>Already have a subscription? <a href="/sign_in?return_to=<%= request.fullpath %>">Sign in instead</a>.</p>
+    <% end %>
+  </div>
+<% else %>
+  <%= simple_format @article.body %>
+<% end %>
