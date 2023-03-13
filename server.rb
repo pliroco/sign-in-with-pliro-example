@@ -35,6 +35,16 @@ before do
   session.destroy if $redis.getex(session[:pliro_session_id], ex: SESSION_EXPIRATION_TIME).nil?
 end
 
+before do
+  if params[:reauth] == 'true'
+    uri = URI(request.fullpath)
+    query_params = parse_query(uri.query)
+    query_params.delete 'reauth'
+    uri.query = query_params.empty? ? nil : build_query(query_params)
+    request_authentication return_to: uri.to_s, prompt: 'none'
+  end
+end
+
 # Block search indexing
 use Rack::ResponseHeaders do |headers|
   headers['X-Robots-Tag'] = 'none'
@@ -198,5 +208,12 @@ helpers do
 
   def build_redirect_uri(return_to:)
     url '/callback' + (return_to.nil? ? '' : "?return_to=#{escape(return_to)}")
+  end
+
+  def build_continue_url
+    uri = URI(request.url)
+    query_params = parse_query(uri.query)
+    uri.query = build_query(query_params.merge(reauth: true))
+    uri.to_s
   end
 end
