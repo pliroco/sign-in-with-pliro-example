@@ -79,6 +79,9 @@ get '/articles/:slug' do
     end
   end
 
+  @page_title = @article.headline
+  @meta_description = @article.meta_description
+
   erb :article
 end
 

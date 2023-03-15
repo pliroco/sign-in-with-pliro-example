@@ -1,8 +1,17 @@
 <!DOCTYPE html>
 <html lang="en-US">
   <head>
-    <title>The Greenfield Times</title>
+    <title><%= [@page_title, 'The Greenfield Times'].compact.join(' - ') %></title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
+
+    <% if @page_title %>
+      <meta property="og:title" content="<%= @page_title %>">
+    <% end %>
+
+    <% if @meta_description %>
+      <meta name="description" content="<%= @meta_description %>">
+    <% end %>
+
     <link rel="stylesheet" href="/style.css">
   </head>
   <body>
