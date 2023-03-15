@@ -35,6 +35,16 @@ before do
   session.destroy if $redis.getex(session[:pliro_session_id], ex: SESSION_EXPIRATION_TIME).nil?
 end
 
+before do
+  if params[:reauth] == 'true'
+    uri = URI(request.fullpath)
+    query_params = parse_query(uri.query)
+    query_params.delete 'reauth'
+    uri.query = query_params.empty? ? nil : build_query(query_params)
+    request_authentication return_to: uri.to_s, prompt: 'none'
+  end
+end
+
 # Block search indexing
 use Rack::ResponseHeaders do |headers|
   headers['X-Robots-Tag'] = 'none'
@@ -53,26 +63,41 @@ get '/articles/:slug' do
 
   raise Sinatra::NotFound unless @article
 
+  if @article.premium && signed_in? && !premium_access?
+    response = Net::HTTP.get_response(
+      URI(PLIRO_OPENID_CONFIG.userinfo_endpoint),
+      'Authorization' => "Bearer #{session[:access_token]}",
+    )
+
+    if response.is_a?(Net::HTTPSuccess)
+      response_json = JSON.parse(response.body)
+
+      session[:name] = response_json.fetch('name')
+      session[:premium] = response_json.fetch('products').include?('premium')
+    elsif response.is_a?(Net::HTTPUnauthorized)
+      request_authentication return_to: request.fullpath, prompt: 'none'
+    end
+  end
+
   erb :article
 end
 
 get '/sign_in' do
-  session[:state] = SecureRandom.hex
-
-  authorization_uri = URI(PLIRO_OPENID_CONFIG.authorization_endpoint)
-  authorization_uri.query = build_query(
-    client_id: PLIRO_CLIENT_ID,
-    response_type: 'code',
-    scope: 'openid profile',
-    redirect_uri: url('/callback'),
-    state: session[:state],
-  )
-
-  redirect authorization_uri
+  request_authentication return_to: params[:return_to]
 end
 
 get '/callback' do
-  if params.key?(:error)
+  return_to_url = if !params[:return_to].nil?
+                    "#{request.scheme}://#{request.host_with_port}#{params[:return_to]}"
+                  else
+                    '/'
+                  end
+
+  if %w(interaction_required login_required account_selection_required consent_required).include?(params[:error])
+    session.destroy
+
+    redirect return_to_url
+  elsif params.key?(:error)
     raise "OIDC error: error=#{params[:error].inspect} description=#{params[:error_description].inspect}"
   end
 
@@ -86,7 +111,7 @@ get '/callback' do
   token_request.form_data = {
     grant_type: 'authorization_code',
     code: params[:code],
-    redirect_uri: url('/callback'),
+    redirect_uri: build_redirect_uri(return_to: params[:return_to]),
   }
   token_request.basic_auth PLIRO_CLIENT_ID, PLIRO_CLIENT_SECRET
 
@@ -99,13 +124,15 @@ get '/callback' do
   id_token_payload = JWT.decode(id_token, nil, false).first
 
   session.destroy
+  session[:access_token] = response_json.fetch('access_token')
   session[:id_token] = id_token
   session[:name] = id_token_payload.fetch('name')
   session[:pliro_session_id] = id_token_payload.fetch('sid')
+  session[:premium] = id_token_payload.fetch('products').include?('premium')
 
   $redis.set session[:pliro_session_id], "", ex: SESSION_EXPIRATION_TIME
 
-  redirect to('/')
+  redirect return_to_url
 end
 
 post '/sign_out' do
@@ -155,7 +182,38 @@ helpers do
     session[:name]
   end
 
+  def premium_access?
+    !!session[:premium]
+  end
+
   def simple_format(text)
     text.split(/\n\n+/).map { |paragraph| "<p>#{paragraph}</p>" }.join("\n")
+  end
+
+  def request_authentication(return_to:, prompt: nil)
+    session[:state] = SecureRandom.hex
+
+    authorization_uri = URI(PLIRO_OPENID_CONFIG.authorization_endpoint)
+    authorization_uri.query = build_query({
+      client_id: PLIRO_CLIENT_ID,
+      response_type: 'code',
+      scope: 'openid profile',
+      redirect_uri: build_redirect_uri(return_to:),
+      state: session[:state],
+      prompt:,
+    }.compact)
+
+    redirect authorization_uri
+  end
+
+  def build_redirect_uri(return_to:)
+    url '/callback' + (return_to.nil? ? '' : "?return_to=#{escape(return_to)}")
+  end
+
+  def build_continue_url
+    uri = URI(request.url)
+    query_params = parse_query(uri.query)
+    uri.query = build_query(query_params.merge(reauth: true))
+    uri.to_s
   end
 end

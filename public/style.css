@@ -14,3 +14,7 @@
   position: relative;
   z-index: 1;
 }
+
+.paywall {
+  background: lightyellow;
+}
