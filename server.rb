@@ -125,7 +125,7 @@ get '/callback' do
 
   response_json = JSON.parse(token_response.body)
   id_token = response_json.fetch('id_token')
-  id_token_payload = JWT.decode(id_token, nil, false).first
+  id_token_payload = decode_jwt(id_token).first
 
   session.destroy
   session[:access_token] = response_json.fetch('access_token')
@@ -153,9 +153,7 @@ post '/sign_out' do
 end
 
 post '/backchannel_logout' do
-  algorithms = %w(ES256)
-  jwks = PLIRO_JWKS.filter { |key| key[:use] == 'sig' && algorithms.include?(key[:alg]) }
-  logout_token_payload, logout_token_header = JWT.decode(params[:logout_token], nil, true, algorithms:, jwks:)
+  logout_token_payload, logout_token_header = decode_jwt(params[:logout_token])
 
   if logout_token_payload['iss'] == PLIRO_OPENID_CONFIG.issuer &&
       logout_token_payload['aud'] == PLIRO_CLIENT_ID &&
@@ -219,5 +217,12 @@ helpers do
     query_params = parse_query(uri.query)
     uri.query = build_query(query_params.merge(reauth: true))
     uri.to_s
+  end
+
+  def decode_jwt(token)
+    algorithms = %w(ES256)
+    jwks = PLIRO_JWKS.filter { |key| key[:use] == 'sig' && algorithms.include?(key[:alg]) }
+
+    JWT.decode(token, nil, true, algorithms:, jwks:)
   end
 end
