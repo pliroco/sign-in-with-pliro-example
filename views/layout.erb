@@ -12,6 +12,10 @@
       <meta name="description" content="<%= @meta_description %>">
     <% end %>
 
+    <% if @og_image %>
+      <meta property="og:image" content="<%= @og_image %>">
+    <% end %>
+
     <link rel="stylesheet" href="/style.css">
   </head>
   <body>

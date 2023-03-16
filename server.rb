@@ -81,6 +81,7 @@ get '/articles/:slug' do
 
   @page_title = @article.headline
   @meta_description = @article.meta_description
+  @og_image = url(@article.image)
 
   erb :article
 end
