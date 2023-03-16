@@ -6,6 +6,7 @@ require 'net/http'
 require 'rack/contrib'
 require 'redis'
 require 'sinatra'
+require 'honeybadger'
 
 if development?
   # Load environment variables from .env and .env.local

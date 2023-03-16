@@ -17,5 +17,8 @@ gem 'jwt'
 # Redis client
 gem 'redis'
 
+# Exception monitoring
+gem 'honeybadger'
+
 # Load environment variables from .env and .env.local
 gem 'dotenv', group: :development
