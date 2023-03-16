@@ -36,7 +36,7 @@ before do
 end
 
 before do
-  if params[:reauth] == 'true'
+  if request.request_method == 'GET' && params[:reauth] == 'true'
     uri = URI(request.fullpath)
     query_params = parse_query(uri.query)
     query_params.delete 'reauth'
