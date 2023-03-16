@@ -92,7 +92,7 @@ end
 
 get '/callback' do
   return_to_url = if !params[:return_to].nil?
-                    "#{request.scheme}://#{request.host_with_port}#{params[:return_to]}"
+                    "#{request.scheme}://#{request.host_with_port}/#{params[:return_to].delete_prefix('/')}"
                   else
                     '/'
                   end
