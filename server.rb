@@ -17,25 +17,39 @@ end
 PLIRO_PAGE_URL = URI(ENV.fetch('PLIRO_PAGE_URL'))
 PLIRO_CLIENT_ID = ENV.fetch('PLIRO_CLIENT_ID')
 PLIRO_CLIENT_SECRET = ENV.fetch('PLIRO_CLIENT_SECRET')
+
+# The OpenID provider configuration contains URIs for required endpoints and the
+# name of the ID and logout token issuer:
 PLIRO_OPENID_CONFIG = JSON.parse(
   Net::HTTP.get(PLIRO_PAGE_URL + '/.well-known/openid-configuration'),
   object_class: OpenStruct,
 )
+
+# The JSON Web Key Set contains the key used to sign ID and logout tokens:
 PLIRO_JWKS = JWT::JWK::Set.new(JSON.parse(Net::HTTP.get(URI(PLIRO_OPENID_CONFIG.jwks_uri))))
 
+# Redis is used to store active Pliro session IDs:
 $redis = Redis.new(url: ENV['REDIS_TLS_URL'], ssl_params: { verify_mode: OpenSSL::SSL::VERIFY_NONE })
 
+# Sessions expire automatically after 24 hours of inactivity:
 SESSION_EXPIRATION_TIME = 60 * 60 * 24
 
 enable :sessions
 set :session_secret, ENV.fetch('SESSION_SECRET')
 
+# This block runs before each request to destroy expired sessions:
 before do
   break if session[:pliro_session_id].nil?
 
+  # If the key exists, GETEX will update exipration time and return its value.
+  # If the key doesn't exist (i.e. it has expired), GETEX just returns nil.
   session.destroy if $redis.getex(session[:pliro_session_id], ex: SESSION_EXPIRATION_TIME).nil?
 end
 
+# This block runs before each request to trigger a silent login flow if the
+# reauth param is set to true. This is used in continue URLs provided to the
+# Pliro checkout flow to make sure customers are signed in after completing the
+# checkout.
 before do
   if request.request_method == 'GET' && params[:reauth] == 'true'
     uri = URI(request.fullpath)
@@ -51,19 +65,24 @@ use Rack::ResponseHeaders do |headers|
   headers['X-Robots-Tag'] = 'none'
 end
 
+# Article data is stored in a JSON file in the project root:
 ARTICLES = JSON.parse(File.read(File.join(__dir__, 'articles.json')), object_class: OpenStruct)
 
+# The home page:
 get '/' do
   @articles = ARTICLES
 
+  # This renders views/home.erb within views/layout.erb:
   erb :home
 end
 
+# The article show page:
 get '/articles/:slug' do
   @article = ARTICLES.find { |article| article.slug == params[:slug] }
 
   raise Sinatra::NotFound unless @article
 
+  # Refresh customer access info in case they have upgraded to premium after they last signed in:
   if @article.premium && signed_in? && !premium_access?
     response = Net::HTTP.get_response(
       URI(PLIRO_OPENID_CONFIG.userinfo_endpoint),
@@ -76,6 +95,7 @@ get '/articles/:slug' do
       session[:name] = response_json.fetch('name')
       session[:premium] = response_json.fetch('products').include?('premium')
     elsif response.is_a?(Net::HTTPUnauthorized)
+      # If the customer's access token has expired, we trigger a silent login flow:
       request_authentication return_to: request.fullpath, prompt: 'none'
     end
   end
@@ -84,14 +104,18 @@ get '/articles/:slug' do
   @meta_description = @article.meta_description
   @og_image = url(@article.image)
 
+  # This renders views/article.erb within views/layout.erb:
   erb :article
 end
 
+# Sign in endpoint:
 get '/sign_in' do
   request_authentication return_to: params[:return_to]
 end
 
+# OAuth callback endpoint:
 get '/callback' do
+  # Avoid open redirect exploits:
   return_to_url = if !params[:return_to].nil?
                     "#{request.scheme}://#{request.host_with_port}/#{params[:return_to].delete_prefix('/')}"
                   else
@@ -99,6 +123,8 @@ get '/callback' do
                   end
 
   if %w(interaction_required login_required account_selection_required consent_required).include?(params[:error])
+    # The silent login flow failed and the user needs to sign in again.
+
     session.destroy
 
     redirect return_to_url
@@ -109,6 +135,8 @@ get '/callback' do
   if params[:state] != session[:state]
     raise "CSRF error: state=#{params[:state].inspect} stored_state=#{session[:state].inspect}"
   end
+
+  # Use the provided authorization code to request acess and ID tokens for the customer:
 
   token_uri = URI(PLIRO_OPENID_CONFIG.token_endpoint)
 
@@ -140,7 +168,9 @@ get '/callback' do
   redirect return_to_url
 end
 
+# Sign out endpoint:
 post '/sign_out' do
+  # Redirecting to this URL signs the customer out of Pliro too:
   end_session_uri = URI(PLIRO_OPENID_CONFIG.end_session_endpoint)
   end_session_uri.query = build_query(
     client_id: PLIRO_CLIENT_ID,
@@ -153,6 +183,8 @@ post '/sign_out' do
   redirect end_session_uri
 end
 
+# OpenID Connect back-channel logout endpoint. If registered, Pliro makes a
+# request to this endpoint when a customer signs out of Pliro:
 post '/backchannel_logout' do
   logout_token_payload, logout_token_header = decode_jwt(params[:logout_token])
 
