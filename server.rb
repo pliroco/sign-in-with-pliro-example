@@ -15,18 +15,10 @@ if development?
 end
 
 PLIRO_PAGE_URL = URI(ENV.fetch('PLIRO_PAGE_URL'))
+PLIRO_ISSUER = ENV.fetch('PLIRO_ISSUER')
+PLIRO_SIGNING_KEY = OpenSSL::PKey.read(ENV.fetch('PLIRO_SIGNING_KEY'))
 PLIRO_CLIENT_ID = ENV.fetch('PLIRO_CLIENT_ID')
 PLIRO_CLIENT_SECRET = ENV.fetch('PLIRO_CLIENT_SECRET')
-
-# The OpenID provider configuration contains URIs for required endpoints and the
-# name of the ID and logout token issuer:
-PLIRO_OPENID_CONFIG = JSON.parse(
-  Net::HTTP.get(PLIRO_PAGE_URL + '/.well-known/openid-configuration'),
-  object_class: OpenStruct,
-)
-
-# The JSON Web Key Set contains the key used to sign ID and logout tokens:
-PLIRO_JWKS = JWT::JWK::Set.new(JSON.parse(Net::HTTP.get(URI(PLIRO_OPENID_CONFIG.jwks_uri))))
 
 # Redis is used to store active Pliro session IDs:
 $redis = Redis.new(url: ENV['REDIS_TLS_URL'], ssl_params: { verify_mode: OpenSSL::SSL::VERIFY_NONE })
@@ -85,7 +77,7 @@ get '/articles/:slug' do
   # Refresh customer access info in case they have upgraded to premium after they last signed in:
   if @article.premium && signed_in? && !premium_access?
     response = Net::HTTP.get_response(
-      URI(PLIRO_OPENID_CONFIG.userinfo_endpoint),
+      PLIRO_PAGE_URL + '/oauth/userinfo',
       'Authorization' => "Bearer #{session[:access_token]}",
     )
 
@@ -138,7 +130,7 @@ get '/callback' do
 
   # Use the provided authorization code to request acess and ID tokens for the customer:
 
-  token_uri = URI(PLIRO_OPENID_CONFIG.token_endpoint)
+  token_uri = PLIRO_PAGE_URL + '/oauth/token'
 
   token_request = Net::HTTP::Post.new(token_uri)
   token_request.form_data = {
@@ -171,7 +163,7 @@ end
 # Sign out endpoint:
 post '/sign_out' do
   # Redirecting to this URL signs the customer out of Pliro too:
-  end_session_uri = URI(PLIRO_OPENID_CONFIG.end_session_endpoint)
+  end_session_uri = PLIRO_PAGE_URL + '/oauth/end_session'
   end_session_uri.query = build_query(
     client_id: PLIRO_CLIENT_ID,
     id_token_hint: session[:id_token],
@@ -188,7 +180,7 @@ end
 post '/backchannel_logout' do
   logout_token_payload, logout_token_header = decode_jwt(params[:logout_token])
 
-  if logout_token_payload['iss'] == PLIRO_OPENID_CONFIG.issuer &&
+  if logout_token_payload['iss'] == PLIRO_ISSUER &&
       logout_token_payload['aud'] == PLIRO_CLIENT_ID &&
       logout_token_payload['iat'] <= Time.now.utc.to_i &&
       logout_token_payload['iat'] >= Time.now.utc.to_i - 5 * 60 &&
@@ -228,7 +220,7 @@ helpers do
   def request_authentication(return_to:, prompt: nil)
     session[:state] = SecureRandom.hex
 
-    authorization_uri = URI(PLIRO_OPENID_CONFIG.authorization_endpoint)
+    authorization_uri = PLIRO_PAGE_URL + '/oauth/authorize'
     authorization_uri.query = build_query({
       client_id: PLIRO_CLIENT_ID,
       response_type: 'code',
@@ -253,9 +245,6 @@ helpers do
   end
 
   def decode_jwt(token)
-    algorithms = %w(ES256)
-    jwks = PLIRO_JWKS.filter { |key| key[:use] == 'sig' && algorithms.include?(key[:alg]) }
-
-    JWT.decode(token, nil, true, algorithms:, jwks:)
+    JWT.decode(token, PLIRO_SIGNING_KEY, true, algorithm: 'ES256')
   end
 end
