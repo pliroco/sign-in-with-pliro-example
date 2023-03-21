@@ -63,7 +63,6 @@ client secret into the following commands:
 
 ```sh
 echo 'PLIRO_PAGE_URL=https://your-account.plirotest.page' >> .env.local
-echo 'PLIRO_ISSUER=https://your-account.plirotest.page' >> .env.local
 echo 'PLIRO_CLIENT_ID=your-client-id' >> .env.local
 echo 'PLIRO_CLIENT_SECRET=your-client-secret' >> .env.local
 ```
