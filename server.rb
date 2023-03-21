@@ -114,7 +114,7 @@ get '/callback' do
                     '/'
                   end
 
-  if %w(interaction_required login_required account_selection_required consent_required).include?(params[:error])
+  if params[:error] == 'login_required'
     # The silent login flow failed and the user needs to sign in again.
 
     session.destroy
