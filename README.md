@@ -1,10 +1,10 @@
-# oidc-example
+# Example Sign in with Pliro integration
 
-This repo contains an example implementation of signing in customers with Pliro
-and managing access to the content of a fictional newspaper called **The
-Greenfield Times**.
+This repo contains an example integration demonstrating how to sign customers
+into the website of a fictional newspaper called "The Greenfield Times", and
+manage access to its content.
 
-You can try this application live at [greenfieldtimes.news]. The site is using
+You can try the application live at [greenfieldtimes.news]. The site is using
 Pliro's test environment which allows you to create a subscription without
 incurring any costs.
 
@@ -18,6 +18,11 @@ familiar to developers using other programming languages and frameworks too.
 [Sinatra]: https://sinatrarb.com
 [Express]: https://expressjs.com
 [Flask]: https://flask.palletsprojects.com
+
+To learn more about to build your integration, checkout the docs on [Sign in
+with Pliro].
+
+[Sign in with Pliro]: https://docs.pliro.co/custom-integrations/sign-in-with-pliro
 
 ## Running the app locally
 
@@ -43,23 +48,20 @@ To set up rbenv, run this and follow the printed instructions:
 rbenv init
 ```
 
-You can then install Ruby with rbenv, and Bundler with gem:
+You can then install Ruby and gem dependencies:
 
 ```sh
-cd oidc-example
+cd sign-in-with-pliro-example
 rbenv install -s
 gem install bundler
-```
-
-Then, use Bundler to install the other Ruby gems this app depends on:
-
-```sh
 bundle install
 ```
 
-The app will also need some configuration to connect with your Pliro account.
-Create an OAuth application in the Pliro Dashboard and copy the client ID and
-client secret into the following commands:
+The app will also need to be configured to connect with your Pliro account.
+[Create an OAuth application in the Pliro Dashboard] and copy the client ID and
+secret into the following commands:
+
+[Create an OAuth application in the Pliro Dashboard]: https://docs.pliro.co/custom-integrations/sign-in-with-pliro#prerequisites
 
 ```sh
 echo 'PLIRO_PAGE_URL=https://your-account.plirotest.page' >> .env.local
