@@ -9,7 +9,7 @@
   <div class="paywall">
     <p>Subscribe to unlock this article</p>
 
-    <a href="<%= PLIRO_PAGE_URL + "/products/premium?continue_url=#{escape(build_continue_url)}" %>">Continue reading for 99 kr</a>
+    <a href="<%= PLIRO_PAGE_URL + "/plans/premium?continue_url=#{escape(build_continue_url)}" %>">Continue reading for 99 kr</a>
 
     <% unless signed_in? %>
       <p>Already have a subscription? <a href="/sign_in?return_to=<%= request.fullpath %>">Sign in instead</a>.</p>
