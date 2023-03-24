@@ -85,7 +85,7 @@ get '/articles/:slug' do
       response_json = JSON.parse(response.body)
 
       session[:name] = response_json.fetch('name')
-      session[:premium] = response_json.fetch('plans').include?('premium')
+      session[:premium] = response_json['plan'] == 'premium'
     elsif response.is_a?(Net::HTTPUnauthorized)
       # If the customer's access token has expired, we trigger a silent login flow:
       request_authentication return_to: request.fullpath, prompt: 'none'
@@ -153,7 +153,7 @@ get '/callback' do
   session[:id_token] = id_token
   session[:name] = id_token_payload.fetch('name')
   session[:pliro_session_id] = id_token_payload.fetch('sid')
-  session[:premium] = id_token_payload.fetch('plans').include?('premium')
+  session[:premium] = id_token_payload['plan'] == 'premium'
 
   $redis.set session[:pliro_session_id], "", ex: SESSION_EXPIRATION_TIME
 
