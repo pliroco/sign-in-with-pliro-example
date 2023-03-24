@@ -26,8 +26,8 @@ with Pliro].
 
 ## Running the app locally
 
-To run this app locally you will need a Pliro test account. If you don't have
-one, email <calle@pliro.co> and I'll help you set one up!
+To run this app locally you will need a Pliro test publication. If you don't
+have one, email <calle@pliro.co> and I'll help you set one up!
 
 This app also requires [Ruby], [Bundler], and [Redis] to run. We recommend using
 [rbenv] (or similar) to install Ruby. On macOS you can install rbenv and Redis
@@ -57,14 +57,14 @@ gem install bundler
 bundle install
 ```
 
-The app will also need to be configured to connect with your Pliro account.
+The app will also need to be configured to connect with your Pliro publication.
 [Create an OAuth application in the Pliro Dashboard] and copy the client ID and
 secret into the following commands:
 
 [Create an OAuth application in the Pliro Dashboard]: https://docs.pliro.co/custom-integrations/sign-in-with-pliro#prerequisites
 
 ```sh
-echo 'PLIRO_PAGE_URL=https://your-account.plirotest.page' >> .env.local
+echo 'PLIRO_PAGE_URL=https://your-publication.plirotest.page' >> .env.local
 echo 'PLIRO_CLIENT_ID=your-client-id' >> .env.local
 echo 'PLIRO_CLIENT_SECRET=your-client-secret' >> .env.local
 ```
