@@ -84,7 +84,7 @@ get '/articles/:slug' do
     if response.is_a?(Net::HTTPSuccess)
       response_json = JSON.parse(response.body)
 
-      session[:name] = response_json.fetch('name')
+      session[:name] = response_json['name']
       session[:premium] = response_json['plan'] == 'premium'
     elsif response.is_a?(Net::HTTPUnauthorized)
       # If the customer's access token has expired, we trigger a silent login flow:
@@ -98,6 +98,12 @@ get '/articles/:slug' do
 
   # This renders views/article.erb within views/layout.erb:
   erb :article
+end
+
+# The pricing page:
+get '/pricing' do
+  # This renders views/pricing.erb within views/layout.erb:
+  erb :pricing
 end
 
 # Sign in endpoint:
@@ -151,7 +157,7 @@ get '/callback' do
   session.destroy
   session[:access_token] = response_json.fetch('access_token')
   session[:id_token] = id_token
-  session[:name] = id_token_payload.fetch('name')
+  session[:name] = id_token_payload['name']
   session[:pliro_session_id] = id_token_payload.fetch('sid')
   session[:premium] = id_token_payload['plan'] == 'premium'
 
@@ -237,8 +243,8 @@ helpers do
     url '/callback' + (return_to.nil? ? '' : "?return_to=#{escape(return_to)}")
   end
 
-  def build_continue_url
-    uri = URI(request.url)
+  def build_continue_url(url = request.url)
+    uri = URI(url)
     query_params = parse_query(uri.query)
     uri.query = build_query(query_params.merge(reauth: true))
     uri.to_s
