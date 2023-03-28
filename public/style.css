@@ -18,14 +18,3 @@
 .paywall {
   background: lightyellow;
 }
-
-.pricing-table {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 2em;
-  max-width: 60em;
-}
-
-.pricing-table > * {
-  flex: 1 0 15em;
-}

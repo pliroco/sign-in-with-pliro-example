@@ -100,12 +100,6 @@ get '/articles/:slug' do
   erb :article
 end
 
-# The pricing page:
-get '/pricing' do
-  # This renders views/pricing.erb within views/layout.erb:
-  erb :pricing
-end
-
 # Sign in endpoint:
 get '/sign_in' do
   request_authentication return_to: params[:return_to]
