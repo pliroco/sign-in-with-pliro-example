@@ -237,8 +237,8 @@ helpers do
     url '/callback' + (return_to.nil? ? '' : "?return_to=#{escape(return_to)}")
   end
 
-  def build_continue_url(url = request.url)
-    uri = URI(url)
+  def build_continue_url
+    uri = URI(request.url)
     query_params = parse_query(uri.query)
     uri.query = build_query(query_params.merge(reauth: true))
     uri.to_s
