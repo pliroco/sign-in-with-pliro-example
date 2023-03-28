@@ -84,7 +84,7 @@ get '/articles/:slug' do
     if response.is_a?(Net::HTTPSuccess)
       response_json = JSON.parse(response.body)
 
-      session[:name] = response_json['name']
+      session[:name] = response_json['name'] || response_json['email']
       session[:premium] = response_json['plan'] == 'premium'
     elsif response.is_a?(Net::HTTPUnauthorized)
       # If the customer's access token has expired, we trigger a silent login flow:
@@ -151,7 +151,7 @@ get '/callback' do
   session.destroy
   session[:access_token] = response_json.fetch('access_token')
   session[:id_token] = id_token
-  session[:name] = id_token_payload['name']
+  session[:name] = id_token_payload['name'] || id_token_payload['email']
   session[:pliro_session_id] = id_token_payload.fetch('sid')
   session[:premium] = id_token_payload['plan'] == 'premium'
 
@@ -224,7 +224,7 @@ helpers do
     authorization_uri.query = build_query({
       client_id: PLIRO_CLIENT_ID,
       response_type: 'code',
-      scope: 'openid profile',
+      scope: 'openid email profile',
       redirect_uri: build_redirect_uri(return_to:),
       state: session[:state],
       prompt:,
