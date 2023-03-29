@@ -28,6 +28,7 @@ SESSION_EXPIRATION_TIME = 60 * 60 * 24
 
 enable :sessions
 set :session_secret, ENV.fetch('SESSION_SECRET')
+set :sessions, expire_after: SESSION_EXPIRATION_TIME
 
 # This block runs before each request to destroy expired sessions:
 before do
