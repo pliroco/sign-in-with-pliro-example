@@ -5,6 +5,8 @@
 
 <h1><%= @article.headline %></h1>
 
+<p><%= @article.teaser %></p>
+
 <% if @article.premium && !premium_access? %>
   <div class="paywall">
     <p>Subscribe to unlock this article</p>
