@@ -8,8 +8,8 @@
 <p><%= @article.teaser %></p>
 
 <% if @article.premium && !premium_access? %>
-  <div class="paywall">
     <p>Subscribe to unlock this article</p>
+  <div class="well paywall">
 
     <p><a class="button" href="<%= PLIRO_PAGE_URL + "/plans/premium?continue_url=#{escape(build_continue_url)}" %>">Continue reading for 99 kr</a></p>
 

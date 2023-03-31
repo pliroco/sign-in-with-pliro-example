@@ -73,6 +73,17 @@ p {
   font-family: arial;
 }
 
+.well {
+  margin: 0 0 1em 0;
+  padding: 1.5em;
+  border: 2px solid lightgrey;
+  border-radius: 3px;
+}
+
+.well h2 {
+  margin-top: 0;
+}
+
 .paywall {
   background: lightyellow;
 }
