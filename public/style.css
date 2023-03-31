@@ -41,6 +41,10 @@ p {
   text-decoration: none;
 }
 
+.content {
+  max-width: 640px;
+}
+
 .teaser {
   position: relative;
 }
