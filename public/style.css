@@ -1,3 +1,37 @@
+body {
+  margin: 0;
+  padding: 1em;
+  font-family: -apple-system, BlinkMacSystemFont, avenir next, avenir, segoe ui, helvetica neue, helvetica, Cantarell, Ubuntu, roboto, noto, arial, sans-serif;
+}
+
+header {
+  margin: 0 0 1em 0;
+}
+
+img {
+  max-width: 100%;
+}
+
+figure {
+  margin: 0;
+}
+
+figcaption {
+  font-size: 0.85em;
+}
+
+h1 {
+  margin: .5em 0 .25em 0;
+}
+
+h2 {
+  margin: .5em 0 .25em 0;
+}
+
+p {
+  margin: 0 0 .5em 0;
+}
+
 .teaser {
   position: relative;
 }
@@ -8,6 +42,10 @@
   right: 0;
   bottom: 0;
   left: 0;
+}
+
+.teaser-content {
+  margin-bottom: 2em;
 }
 
 .teaser-content a[href] {
