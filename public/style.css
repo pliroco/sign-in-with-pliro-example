@@ -32,6 +32,15 @@ p {
   margin: 0 0 .5em 0;
 }
 
+.button {
+  display: inline-block;
+  padding: .5em 1.5em;
+  color: #fff;
+  background: rgb(85, 26, 139);
+  border-radius: 5px;
+  text-decoration: none;
+}
+
 .teaser {
   position: relative;
 }
