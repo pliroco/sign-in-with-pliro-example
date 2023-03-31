@@ -18,7 +18,12 @@
 
       <h2><%= article.headline %></h2>
 
-      <p><%= article.teaser %></p>
+      <p>
+        <% if article.premium %>
+          <strong class="label">Premium</strong>
+        <% end %>
+        <%= article.teaser %>
+      </p>
     </div>
   </div>
 <% end %>
