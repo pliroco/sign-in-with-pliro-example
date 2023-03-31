@@ -16,7 +16,7 @@
     <p><a class="button" href="<%= PLIRO_PAGE_URL + "/plans/premium?continue_url=#{escape(build_continue_url)}" %>">Continue reading for 99 kr</a></p>
 
     <% unless signed_in? %>
-      <p>Already have a subscription? <a href="/sign_in?return_to=<%= request.fullpath %>">Sign in instead</a>.</p>
+      <p class="well-footer">Already have a subscription? <a href="/sign_in?return_to=<%= request.fullpath %>">Sign in instead</a>.</p>
     <% end %>
   </div>
 <% else %>

@@ -88,6 +88,13 @@ p {
   margin-top: 0;
 }
 
+.well-footer {
+  margin: 0;
+  padding-top: 1em;
+  border-top: 1px solid lightgrey;
+  font-size: 0.85em;
+}
+
 .paywall {
   background: lightyellow;
 }
