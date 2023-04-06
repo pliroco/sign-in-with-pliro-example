@@ -64,7 +64,7 @@ secret into the following commands:
 [Create an OAuth application in the Pliro Dashboard]: https://docs.pliro.co/custom-integrations/sign-in-with-pliro#prerequisites
 
 ```sh
-echo 'PLIRO_PAGE_URL=https://your-publication.plirotest.page' >> .env.local
+echo 'PLIRO_SITE_URL=https://your-publication.plirotest.page' >> .env.local
 echo 'PLIRO_CLIENT_ID=your-client-id' >> .env.local
 echo 'PLIRO_CLIENT_SECRET=your-client-secret' >> .env.local
 ```

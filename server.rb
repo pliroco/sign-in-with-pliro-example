@@ -14,8 +14,8 @@ if development?
   Dotenv.load '.env.local', '.env'
 end
 
-PLIRO_PAGE_URL = URI(ENV.fetch('PLIRO_PAGE_URL'))
-PLIRO_ISSUER = ENV['PLIRO_ISSUER'] || ENV.fetch('PLIRO_PAGE_URL')
+PLIRO_SITE_URL = URI(ENV.fetch('PLIRO_SITE_URL'))
+PLIRO_ISSUER = ENV['PLIRO_ISSUER'] || ENV.fetch('PLIRO_SITE_URL')
 PLIRO_SIGNING_KEY = OpenSSL::PKey.read(ENV.fetch('PLIRO_SIGNING_KEY'))
 PLIRO_CLIENT_ID = ENV.fetch('PLIRO_CLIENT_ID')
 PLIRO_CLIENT_SECRET = ENV.fetch('PLIRO_CLIENT_SECRET')
@@ -78,7 +78,7 @@ get '/articles/:slug' do
   # Refresh customer access info in case they have upgraded to premium after they last signed in:
   if @article.premium && signed_in? && !premium_access?
     response = Net::HTTP.get_response(
-      PLIRO_PAGE_URL + '/oauth/userinfo',
+      PLIRO_SITE_URL + '/oauth/userinfo',
       'Authorization' => "Bearer #{session[:access_token]}",
     )
 
@@ -131,7 +131,7 @@ get '/callback' do
 
   # Use the provided authorization code to request acess and ID tokens for the customer:
 
-  token_uri = PLIRO_PAGE_URL + '/oauth/token'
+  token_uri = PLIRO_SITE_URL + '/oauth/token'
 
   token_request = Net::HTTP::Post.new(token_uri)
   token_request.form_data = {
@@ -164,7 +164,7 @@ end
 # Sign out endpoint:
 post '/sign_out' do
   # Redirecting to this URL signs the customer out of Pliro too:
-  end_session_uri = PLIRO_PAGE_URL + '/oauth/end_session'
+  end_session_uri = PLIRO_SITE_URL + '/oauth/end_session'
   end_session_uri.query = build_query(
     client_id: PLIRO_CLIENT_ID,
     id_token_hint: session[:id_token],
@@ -221,7 +221,7 @@ helpers do
   def request_authentication(return_to:, prompt: nil)
     session[:state] = SecureRandom.hex
 
-    authorization_uri = PLIRO_PAGE_URL + '/oauth/authorize'
+    authorization_uri = PLIRO_SITE_URL + '/oauth/authorize'
     authorization_uri.query = build_query({
       client_id: PLIRO_CLIENT_ID,
       response_type: 'code',

@@ -25,14 +25,14 @@
       <% if signed_in? %>
         Signed in as <%= customer_name %>
 
-        <a href="<%= PLIRO_PAGE_URL + '/customer' %>">My account</a>
+        <a href="<%= PLIRO_SITE_URL + '/customer' %>">My account</a>
 
         <form action="/sign_out" method="post" style="display: inline">
           <input type="submit" value="Sign out">
         </form>
       <% else %>
         <a href="/sign_in">Sign in</a>
-        <a href="<%= PLIRO_PAGE_URL + "/?continue_url=#{escape(build_continue_url)}" %>">Subscribe</a>
+        <a href="<%= PLIRO_SITE_URL + "/?continue_url=#{escape(build_continue_url)}" %>">Subscribe</a>
       <% end %>
     </header>
 
