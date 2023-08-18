@@ -1,7 +1,7 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    connection_pool (2.3.0)
+    connection_pool (2.4.1)
     dotenv (2.8.1)
     honeybadger (5.2.1)
     jwt (2.7.1)
@@ -15,9 +15,9 @@ GEM
       rack (~> 2.0)
     rack-protection (3.0.6)
       rack
-    redis (5.0.6)
+    redis (5.0.7)
       redis-client (>= 0.9.0)
-    redis-client (0.12.2)
+    redis-client (0.15.0)
       connection_pool
     ruby2_keywords (0.0.5)
     sinatra (3.0.6)
