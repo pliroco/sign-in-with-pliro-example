@@ -1,6 +1,7 @@
 GEM
   remote: https://rubygems.org/
   specs:
+    base64 (0.2.0)
     connection_pool (2.4.1)
     dotenv (2.8.1)
     honeybadger (5.4.0)
@@ -13,19 +14,20 @@ GEM
     rack (2.2.8)
     rack-contrib (2.4.0)
       rack (< 4)
-    rack-protection (3.1.0)
+    rack-protection (3.2.0)
+      base64 (>= 0.1.0)
       rack (~> 2.2, >= 2.2.4)
     redis (5.0.8)
       redis-client (>= 0.17.0)
     redis-client (0.17.1)
       connection_pool
     ruby2_keywords (0.0.5)
-    sinatra (3.1.0)
+    sinatra (3.2.0)
       mustermann (~> 3.0)
       rack (~> 2.2, >= 2.2.4)
-      rack-protection (= 3.1.0)
+      rack-protection (= 3.2.0)
       tilt (~> 2.0)
-    tilt (2.2.0)
+    tilt (2.3.0)
 
 PLATFORMS
   arm64-darwin-21
