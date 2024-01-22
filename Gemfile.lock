@@ -19,6 +19,9 @@ GEM
       rack (>= 3.0.0, < 4)
     rack-session (2.0.0)
       rack (>= 3.0.0)
+    rackup (2.1.0)
+      rack (>= 3)
+      webrick (~> 1.8)
     redis (5.0.8)
       redis-client (>= 0.17.0)
     redis-client (0.17.1)
@@ -31,6 +34,7 @@ GEM
       rack-session (>= 2.0.0, < 3)
       tilt (~> 2.0)
     tilt (2.3.0)
+    webrick (1.8.1)
 
 PLATFORMS
   arm64-darwin-21
@@ -43,6 +47,7 @@ DEPENDENCIES
   jwt
   puma
   rack-contrib
+  rackup (~> 2.1)
   redis
   sinatra
 
