@@ -23,9 +23,9 @@ GEM
     rackup (2.1.0)
       rack (>= 3)
       webrick (~> 1.8)
-    redis (5.1.0)
-      redis-client (>= 0.17.0)
-    redis-client (0.19.1)
+    redis (5.2.0)
+      redis-client (>= 0.22.0)
+    redis-client (0.22.0)
       connection_pool
     ruby2_keywords (0.0.5)
     sinatra (4.0.0)
