@@ -3,7 +3,7 @@ GEM
   specs:
     base64 (0.2.0)
     connection_pool (2.4.1)
-    dotenv (3.1.2)
+    dotenv (3.1.4)
     honeybadger (5.15.6)
     jwt (2.9.0)
       base64
