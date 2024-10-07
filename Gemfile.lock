@@ -6,7 +6,7 @@ GEM
     dotenv (3.1.4)
     honeybadger (5.16.0)
       logger
-    jwt (2.9.1)
+    jwt (2.9.3)
       base64
     logger (1.6.1)
     mustermann (3.0.0)
