@@ -21,7 +21,7 @@ PLIRO_CLIENT_ID = ENV.fetch('PLIRO_CLIENT_ID')
 PLIRO_CLIENT_SECRET = ENV.fetch('PLIRO_CLIENT_SECRET')
 
 # Redis is used to store active Pliro session IDs:
-$redis = Redis.new(url: ENV['REDIS_TLS_URL'], ssl_params: { verify_mode: OpenSSL::SSL::VERIFY_NONE })
+$redis = Redis.new(url: ENV['REDIS_URL'], ssl_params: { verify_mode: OpenSSL::SSL::VERIFY_NONE })
 
 # Sessions expire automatically after 7 days of inactivity:
 SESSION_EXPIRATION_TIME = 7 * 24 * 60 * 60 # seconds
