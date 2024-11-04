@@ -4,7 +4,7 @@ ruby '3.2.2'
 
 # Web application DSL
 gem 'sinatra'
-gem 'rackup', '~> 2.1'
+gem 'rackup', '~> 2.2'
 
 # Web server
 gem 'puma'
