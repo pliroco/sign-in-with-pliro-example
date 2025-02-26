@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-ruby '3.4.2'
+ruby file: ".ruby-version"
 
 # Web application DSL
 gem 'sinatra'
