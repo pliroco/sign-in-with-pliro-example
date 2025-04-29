@@ -1,5 +1,6 @@
 require 'bundler/setup'
 
+require 'ostruct'
 require 'json'
 require 'jwt'
 require 'net/http'
