@@ -10,16 +10,16 @@ GEM
     jwt (3.1.2)
       base64
     logger (1.7.0)
-    mustermann (3.0.3)
+    mustermann (3.0.4)
       ruby2_keywords (~> 0.0.1)
     nio4r (2.7.4)
     ostruct (0.6.3)
     puma (7.0.4)
       nio4r (~> 2.0)
-    rack (3.1.18)
+    rack (3.2.3)
     rack-contrib (2.5.0)
       rack (< 4)
-    rack-protection (4.1.1)
+    rack-protection (4.2.1)
       base64 (>= 0.1.0)
       logger (>= 1.6.0)
       rack (>= 3.0.0, < 4)
@@ -33,14 +33,14 @@ GEM
     redis-client (0.25.1)
       connection_pool
     ruby2_keywords (0.0.5)
-    sinatra (4.1.1)
+    sinatra (4.2.1)
       logger (>= 1.6.0)
       mustermann (~> 3.0)
       rack (>= 3.0.0, < 4)
-      rack-protection (= 4.1.1)
+      rack-protection (= 4.2.1)
       rack-session (>= 2.0.0, < 3)
       tilt (~> 2.0)
-    tilt (2.4.0)
+    tilt (2.6.1)
 
 PLATFORMS
   arm64-darwin-21
