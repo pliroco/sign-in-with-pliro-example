@@ -42,7 +42,7 @@ end
 
 # This block runs before each request to trigger a silent login flow if the
 # reauth param is set to true. This is used in continue URLs provided to the
-# Pliro checkout flow to make sure customers are signed in after completing the
+# Pliro checkout flow to make sure members are signed in after completing the
 # checkout.
 before do
   if request.request_method == 'GET' && params[:reauth] == 'true'
@@ -76,7 +76,7 @@ get '/articles/:slug' do
 
   raise Sinatra::NotFound unless @article
 
-  # Refresh customer access info in case they have upgraded to premium after they last signed in:
+  # Refresh member access info in case they have upgraded to premium after they last signed in:
   if @article.premium && signed_in? && !premium_access?
     response = Net::HTTP.get_response(
       PLIRO_SITE_URL + '/oauth/userinfo',
@@ -89,7 +89,7 @@ get '/articles/:slug' do
       session[:name] = response_json['name'] || response_json['email']
       session[:premium] = response_json['plan'] == 'premium'
     elsif response.is_a?(Net::HTTPUnauthorized)
-      # If the customer's access token has expired, we trigger a silent login flow:
+      # If the member's access token has expired, we trigger a silent login flow:
       request_authentication return_to: request.fullpath, prompt: 'none'
     end
   end
@@ -130,7 +130,7 @@ get '/callback' do
     raise "CSRF error: state=#{params[:state].inspect} stored_state=#{session[:state].inspect}"
   end
 
-  # Use the provided authorization code to request acess and ID tokens for the customer:
+  # Use the provided authorization code to request access and ID tokens for the member:
 
   token_uri = PLIRO_SITE_URL + '/oauth/token'
 
@@ -164,7 +164,7 @@ end
 
 # Sign out endpoint:
 post '/sign_out' do
-  # Redirecting to this URL signs the customer out of Pliro too:
+  # Redirecting to this URL signs the member out of Pliro too:
   end_session_uri = PLIRO_SITE_URL + '/oauth/end_session'
   end_session_uri.query = build_query(
     client_id: PLIRO_CLIENT_ID,
@@ -178,7 +178,7 @@ post '/sign_out' do
 end
 
 # OpenID Connect back-channel logout endpoint. If registered, Pliro makes a
-# request to this endpoint when a customer signs out of Pliro:
+# request to this endpoint when a member signs out of Pliro:
 post '/backchannel_logout' do
   logout_token_payload, logout_token_header = decode_jwt(params[:logout_token])
 
@@ -207,7 +207,7 @@ helpers do
     !session[:id_token].nil?
   end
 
-  def customer_name
+  def member_name
     session[:name]
   end
 

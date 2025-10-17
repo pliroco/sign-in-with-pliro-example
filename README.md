@@ -1,6 +1,6 @@
 # Example Sign in with Pliro integration
 
-This repo contains an example integration demonstrating how to sign customers
+This repo contains an example integration demonstrating how to sign members
 into the website of a fictional newspaper called "The Greenfield Times", and
 manage access to its content.
 
