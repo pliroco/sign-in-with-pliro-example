@@ -4,7 +4,7 @@ ruby file: ".ruby-version"
 
 # Web application DSL
 gem 'sinatra'
-gem 'rackup', '~> 2.2'
+gem 'rackup', '~> 2.3'
 
 # Web server
 gem 'puma'
