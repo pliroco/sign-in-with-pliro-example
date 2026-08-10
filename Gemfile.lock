@@ -2,7 +2,7 @@ GEM
   remote: https://rubygems.org/
   specs:
     base64 (0.3.0)
-    connection_pool (2.5.3)
+    connection_pool (3.0.2)
     dotenv (3.2.0)
     honeybadger (6.9.1)
       logger
@@ -28,9 +28,9 @@ GEM
       rack (>= 3.0.0)
     rackup (2.3.1)
       rack (>= 3)
-    redis (5.4.1)
-      redis-client (>= 0.22.0)
-    redis-client (0.25.1)
+    redis (6.0.0)
+      redis-client (= 0.30.1)
+    redis-client (0.30.1)
       connection_pool
     ruby2_keywords (0.0.5)
     sinatra (4.2.1)
